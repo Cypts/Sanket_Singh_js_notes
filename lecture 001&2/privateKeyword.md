@@ -195,4 +195,5 @@ let p = new Product.Builder()
 p.displayProduct();
 ```
 Here if we not set builder static we have to create new object for builder.\
-To create new object for creating an object it doesn't make sense.\
+To create new object for creating an object it doesn't make sense.
+
