@@ -121,3 +121,78 @@ console.log(obj.x);
 console.log(f.x);
 ```
 here obj.x consoles undefined but f.x consoles 10. This is because 'x' is `static` , 'x' is associated to 'f' which is a class not to an object 'obj'. 
+
+- Calling inside the construction without refrence to class wont work
+```js
+class f{
+    static x = 10;
+    constructor(a){
+        this.a = a;
+        console.log(x); // this will not work
+        console.log(f.x); // this will work
+    }
+}
+```
+**Why do we need static?**
+- sometime we need to know some information about object before it creation.
+- Implementation of builder pattern 
+- Example : Assume `Product` class should have only one product for each type, assume  `iphone11`. We can accidently create another product with name `iphone11`.
+
+
+```js
+class Product {
+  #name = "nothing";
+  #price = "nothing";
+  #type = "nothing";
+  constructor(builder) {
+    this.#name = builder.name;
+    if (builder.price > 0) {
+      this.#price = builder.price;
+    } else {
+      return {};
+    }
+    this.#type = builder.type;
+  }
+
+  displayProduct() {
+    console.log("displayed Product is : " + this.#name + " price is:  "+ this.#price+" type of product: "+ this.#type);
+  }
+
+  static get Builder() {
+    class Builder {
+      constructor(name, price, type) {
+        this.name = "";
+        this.price = 0;
+        this.type = "";
+      }
+      setName(name) {
+        this.name = name;
+        return this;
+      }
+      setPrice(price) {
+        this.price = price;
+        return this;
+      }
+      setType(type) {
+        this.type = type;
+        return this;
+      }
+
+      build() {
+        return new Product(this);
+      }
+    }
+    return Builder;
+  }
+}
+
+
+let p = new Product.Builder()
+                .setName("iphone")
+                .setPrice(1000)
+                .setType("phone")
+                .build();
+p.displayProduct();
+```
+Here if we not set builder static we have to create new object for builder.\
+To create new object for creating an object it doesn't make sense.\
